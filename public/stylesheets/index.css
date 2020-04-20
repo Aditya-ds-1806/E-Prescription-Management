@@ -1,0 +1,40 @@
+body {
+    height: 100vh;
+    /* fallback for old browsers */
+    background: #8A2387;
+    /* Chrome 10-25, Safari 5.1-6 */
+    background: -webkit-linear-gradient(to right, #F27121, #E94057, #8A2387);
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: linear-gradient(to right, #F27121, #E94057, #8A2387);
+    background-repeat: no-repeat;
+    background-size: 500%;
+    background-position-x: 0%;
+    animation: bg-color-change 20s linear infinite alternate;
+}
+
+header {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+@media (max-width: 767px) {
+    h1 {
+        font-size: 12vw !important;
+    }
+
+    a.btn {
+        font-size: 3vw !important;
+    }
+}
+
+@keyframes bg-color-change {
+    from {
+        background-position-x: 0%;
+    }
+
+    to {
+        background-position-x: 100%;
+    }
+}
