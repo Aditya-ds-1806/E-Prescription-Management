@@ -1,18 +1,4 @@
 const prescription = require('../models/prescription');
-const Post = prescription.model;
-
-exports.renderPrescription = function (req, res) {
-    const newPrescription = exports.generatePrescription(req);
-    Post.create(newPrescription, function (err, createdPrescription) {
-        if (err) {
-            console.error(err);
-            res.sendStatus(500);
-        } else {
-            console.log("Created new prescription");
-            res.render('prescription', { prescription: createdPrescription });
-        }
-    });
-}
 
 exports.generatePrescription = function (req) {
     const medicineCount = 0.25 * (Object.keys(req.body).length - 11);
