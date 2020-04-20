@@ -4,156 +4,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team 1948</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <title>Document</title>
+    <link rel="stylesheet" href="/stylesheets/index.css">
 </head>
 
 <body>
-    <article class="container">
-        <form class="my-5" method="POST" action="prescription">
-            <h1 class="text-center">Hospital Details</h1>
-            <div class="form-row justify-content-between mb-5">
-                <div class="form-group col-md-5">
-                    <label for="hospitalName">Hospital Name</label>
-                    <input type="text" placeholder="Health Choice Clinic" class="form-control" name="hospitalName"
-                        id="hospitalName" required>
-                </div>
-                <div class="form-group col-md-5">
-                    <label for="location">Location</label>
-                    <input type="text" placeholder="Riverside St, Bingham, NY 130, USA" class="form-control"
-                        name="location" id="location" required>
-                </div>
-                <div class="form-group col-md-5">
-                    <label for="emailID">Email</label>
-                    <input type="email" class="form-control" name="emailID" id="emailID"
-                        placeholder="hospital@blah-hospital.com" required>
-                </div>
-                <div class="form-group col-md-5">
-                    <label for="website">Website</label>
-                    <input type="url" class="form-control" name="website" id="website"
-                        placeholder="https://www.TheBlahHospital.com" required>
-                </div>
-                <div class="form-group col-md-5">
-                    <label for="contact">Contact</label>
-                    <input type="text" class="form-control" name="contact" id="contact" placeholder="+1 392-747-4830"
-                        required>
-                </div>
+    <header class="container-lg text-white text-center">
+        <div class="row justify-content-center align-items-center">
+            <div class="col-12">
+                <h1 class="display-2 text-uppercase"><strong>E-Prescription Management System</strong></h1>
             </div>
-
-            <h1 class="text-center">Doctor Details</h1>
-            <div class="form-row justify-content-between mb-5">
-                <div class="form-group col-md-5">
-                    <label for="docName">Name</label>
-                    <input type="text" class="form-control" name="docName" id="docName"
-                        placeholder="Dr. Ashley D. Stone" required>
-                </div>
-                <div class="form-group col-md-5">
-                    <label for="specialisation">Speciality</label>
-                    <input type="text" class="form-control" name="specialisation" id="specialisation"
-                        placeholder="General Physician" required>
-                </div>
+            <div class="col-12">
+                <h1 class="display-4">Welcome, Aditya D.S.</h1>
             </div>
-
-            <h1 class="text-center">Patient Details</h1>
-            <div class="form-row justify-content-between mb-5">
-                <div class="form-group col-md-5">
-                    <label for="patientName">Name</label>
-                    <input type="text" class="form-control" name="patientName" id="patientName"
-                        placeholder="Jeffrey Brown" required>
-                </div>
-                <div class="form-group col-md-5">
-                    <label for="age">Age</label>
-                    <input type="number" min="0" max="110" class="form-control" name="age" id="age" placeholder="22"
-                        required>
-                </div>
-                <div class="form-group col-md-5">
-                    <label for="patientContact">Contact</label>
-                    <input type="text" class="form-control" name="patientContact" id="patientContact"
-                        placeholder="+1 392-747-4830" required>
-                </div>
-                <div class="form-group col-md-5">
-                    <label for="address">Address</label>
-                    <input type="text" class="form-control" id="address" name="address"
-                        placeholder="Riverside St, Bingham, NY 130, USA" required>
-                </div>
+        </div>
+        <div class="row justify-content-center align-items-center mt-5">
+            <div class="col-4">
+                <a href="" class="btn btn-light btn-lg">Sign in with Google</a>
             </div>
-
-            <h1 class="text-center">Prescription</h1>
-            <div class="form-row justify-content-between mb-1" name="prescription" id="prescription">
-                <div class="form-group col-md-4">
-                    <label for="drug0">Drug</label>
-                    <input type="text" class="form-control" name="drug0" id="drug0" placeholder="Paracetamol" required>
-                </div>
-                <div class="form-group col-md-2">
-                    <label for="dosage0">Dosage</label>
-                    <input type="text" class="form-control" name="dosage0" id="dosage0" placeholder="100mg" required>
-                </div>
-                <div class="form-group col-md-2">
-                    <label for="freq0">Frequency</label>
-                    <input type="text" class="form-control" name="freq0" id="freq0" placeholder="1-0-0" required>
-                </div>
-                <div class="form-group col-md-2">
-                    <label for="duration0">Duration</label>
-                    <input type="text" class="form-control" name="duration0" id="duration0" placeholder="5 days"
-                        required>
-                </div>
+            <div class="col-4">
+                <a href="/form" class="btn btn-light btn-lg">Generate New Prescription</a>
             </div>
-            <div class="form-row justify-content-end mb-3">
-                <button id="addNewDrug" class="btn btn-primary rounded-circle mr-4"
-                    style="width: 60px; height: 60px;"><span class="display-4"
-                        style="line-height: 0.6">+</span></button>
-                <button id="deleteLastEntry" class="btn btn-danger rounded-circle"
-                    style="width: 60px; height: 60px; transform: rotateZ(45deg);"><span class="display-4"
-                        style="line-height: 0.6">+</span></button>
+            <div class="col-4">
+                <a href="" class="btn btn-light btn-lg">Verify Authenticity</a>
             </div>
-            <button type="submit" class="btn btn-primary btn-lg">Generate E-Prescription </button>
-        </form>
-    </article>
-
-    <script>
-        const newDrugButton = document.querySelector("#addNewDrug");
-        const deleteEntry = document.querySelector("#deleteLastEntry");
-        const prescription = document.querySelector("#prescription");
-
-        newDrugButton.addEventListener("click", function (e) {
-            e.preventDefault();
-            var num = (0.25 * prescription.childElementCount).toString();
-            createNewFormInput("col-md-4", "drug" + num, "Drug", "Paracetamol");
-            createNewFormInput("col-md-2", "dosage" + num, "Dosage", "100mg");
-            createNewFormInput("col-md-2", "freq" + num, "Frequency", "1-0-0");
-            createNewFormInput("col-md-2", "duration" + num, "Duration", "5 days");
-        });
-
-        deleteEntry.addEventListener("click", function (e) {
-            e.preventDefault();
-            const len = prescription.childElementCount;
-            if (len > 3)
-                for (let i = len - 1; i >= len - 4; i--)
-                    prescription.children[i].remove();
-        });
-
-        function createNewFormInput(className, labelFor, labelText, placeholder) {
-            var div = document.createElement("div");
-            var label = document.createElement("label");
-            var input = document.createElement("input");
-
-            label.setAttribute("for", labelFor);
-            label.textContent = labelText;
-
-            input.setAttribute("type", "text");
-            input.setAttribute("id", labelFor);
-            input.setAttribute("name", labelFor);
-            input.setAttribute("placeholder", placeholder);
-            input.classList.add("form-control");
-
-            div.classList.add("form-group", className);
-            div.appendChild(label);
-            div.appendChild(input);
-
-            prescription.appendChild(div);  
-        }
-    </script>
+        </div>
+    </header>
 </body>
 
 </html>
