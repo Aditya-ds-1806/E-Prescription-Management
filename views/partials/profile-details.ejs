@@ -1,0 +1,52 @@
+<form class="my-5" method="POST" action="profile">
+    <h1 class="text-center">Doctor Details</h1>
+    <div class="form-row justify-content-between mb-5">
+        <div class="form-group col-md-5">
+            <label for="docName">Name</label>
+            <input type="text" readonly ondblclick="this.readOnly = false"
+                class="border p-2 border-dark form-control-plaintext" name="docName" id="docName"
+                placeholder="Dr. Ashley D. Stone" value="<%= doctor.name %>" required>
+        </div>
+        <div class="form-group col-md-5">
+            <label for="specialisation">Specialisation</label>
+            <input type="text" readonly ondblclick="this.readOnly = false"
+                class="border p-2 border-dark form-control-plaintext" name="specialisation" id="specialisation"
+                placeholder="General Physician" value="<%= doctor.specialisation %>" required>
+        </div>
+    </div>
+
+    <h1 class="text-center">Hospital Details</h1>
+    <div class="form-row justify-content-between mb-5">
+        <div class="form-group col-md-5">
+            <label for="hospitalName">Hospital Name</label>
+            <input type="text" readonly ondblclick="this.readOnly = false" placeholder="Health Choice Clinic"
+                class="border p-2 border-dark form-control-plaintext" name="hospitalName" id="hospitalName"
+                value="<%= doctor.hospital.name %>" required>
+        </div>
+        <div class="form-group col-md-5">
+            <label for="location">Location</label>
+            <input type="text" readonly ondblclick="this.readOnly = false"
+                placeholder="Riverside St, Bingham, NY 130, USA" class="border p-2 border-dark form-control-plaintext"
+                name="location" id="location" value="<%= doctor.hospital.location %>" required>
+        </div>
+        <div class="form-group col-md-5">
+            <label for="emailID">Email</label>
+            <input type="email" readonly ondblclick="this.readOnly = false"
+                class="border p-2 border-dark form-control-plaintext" name="emailID" id="emailID"
+                placeholder="hospital@blah-hospital.com" value="<%= doctor.hospital.email %>" required>
+        </div>
+        <div class="form-group col-md-5">
+            <label for="website">Website</label>
+            <input type="url" readonly ondblclick="this.readOnly = false"
+                class="border p-2 border-dark form-control-plaintext" name="website" id="website"
+                placeholder="https://www.TheBlahHospital.com" value="<%= doctor.hospital.website %>" required>
+        </div>
+        <div class="form-group col-md-5">
+            <label for="contact">Contact</label>
+            <input type="text" readonly ondblclick="this.readOnly = false"
+                class="border p-2 border-dark form-control-plaintext" name="contact" id="contact"
+                placeholder="+1 392-747-4830" value="<%= doctor.hospital.contact %>" required>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary btn">Update Profile</button>
+</form>
