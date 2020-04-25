@@ -21,11 +21,15 @@ header {
 
 @media (max-width: 767px) {
     h1 {
-        font-size: 12vw !important;
+        font-size: 10vw !important;
     }
 
     a.btn {
         font-size: 3vw !important;
+    }
+
+    img {
+        width: 30vw;
     }
 }
 
