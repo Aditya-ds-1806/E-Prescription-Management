@@ -1,7 +1,7 @@
-const prescription = require('../models/prescription');
+const Prescription = require('../models/prescription').model;
 
 exports.generatePrescription = function (req) {
-    const medicineCount = 0.25 * (Object.keys(req.body).length - 11);
+    const medicineCount = 0.25 * (Object.keys(req.body).length - 4);
     var medicines = [];
     for (let i = 0; i < medicineCount; i++) {
         var medicine = {
@@ -14,23 +14,24 @@ exports.generatePrescription = function (req) {
     }
 
     const prescription = {
-        hospital: {
-            name: req.body.hospitalName,
-            location: req.body.location,
-            email: req.body.emailID,
-            website: req.body.website,
-            contact: req.body.contact
-        },
-        doctorName: req.body.docName,
-        specialisation: req.body.specialisation,
-        doctorContact: req.body.contact,
+        doctor: req.user.id,
         medicines: medicines,
         patient: {
             name: req.body.patientName,
             age: req.body.age,
             address: req.body.address,
-            contact: req.body.contact
+            contact: req.body.patientContact
         }
     };
     return prescription;
+}
+
+exports.savePrescription = async function (newPrescription) {
+    const savedPrescription = await Prescription.create(newPrescription);
+    return savedPrescription;
+}
+
+exports.getPrescription = async function (id) {
+    const prsc = await Prescription.findById(id);
+    return await prsc.populate('doctor').execPopulate();
 }
