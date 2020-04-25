@@ -16,20 +16,35 @@
             <div class="col-12">
                 <h1 class="display-2 text-uppercase"><strong>E-Prescription Management System</strong></h1>
             </div>
+            <% if(loggedIn) { %>
+            <img class="rounded-circle img-fluid" src="<%= doctor.image %>" alt="Profile picture">
             <div class="col-12">
-                <h1 class="display-4">Welcome, Aditya D.S.</h1>
+                <h1 class="display-4 text-capitalize">Dr. <%= doctor.name.toLowerCase() %></h1>
             </div>
+            <% } %>
         </div>
-        <div class="row justify-content-center align-items-center mt-5">
+        <div class="row justify-content-around align-items-center mt-5">
+            <% if(!loggedIn) { %>
+            <div class="col-8 col-sm-4">
+                <a href="/auth/google" class="btn btn-light btn-lg mx-auto d-block">Sign in with Google</a>
+            </div>
+            <% } %>
+            <% if(loggedIn) { %>
+            <% if(doctor.hasUpdatedDetails) { %>
             <div class="col-4">
-                <a href="" class="btn btn-light btn-lg">Sign in with Google</a>
+                <a href="/prescription" class="btn btn-light btn-lg mx-auto d-block">New Prescription</a>
             </div>
             <div class="col-4">
-                <a href="/form" class="btn btn-light btn-lg">Generate New Prescription</a>
+                <a href="" class="btn btn-light btn-lg mx-auto d-block">Verify Authenticity</a>
+            </div>
+            <% } %>
+            <div class="col-4">
+                <a href="/profile" class="btn btn-light btn-lg mx-auto d-block">Update Profile</a>
             </div>
             <div class="col-4">
-                <a href="" class="btn btn-light btn-lg">Verify Authenticity</a>
+                <a href="/auth/logout" class="btn btn-light btn-lg mx-auto d-block">Logout</a>
             </div>
+            <% } %>
         </div>
     </header>
 </body>
