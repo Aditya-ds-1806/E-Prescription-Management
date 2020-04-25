@@ -1,27 +1,49 @@
 const express = require('express');
 const router = express.Router({ mergeParams: true });
 
-const PrescriptionController = require('../controllers/prescription');
+const user = require('../middleware/index');
 
-const prescription = require('../models/prescription');
-const Post = prescription.model;
+const PrescriptionController = require('../controllers/prescription');
+const DoctorController = require('../controllers/doctor');
 
 router.get('/', function (req, res) {
-    res.render('index');
+    res.render('index', { doctor: req.user, loggedIn: req.isAuthenticated() });
 });
 
-router.get('/form', function (req, res) {
+router.get('/prescription', user.isLoggedIn, function (req, res) {
     res.render('form');
 });
 
-router.post('/prescription', function (req, res) {
-    const prescription = PrescriptionController.generatePrescription(req);
-    Post.create(prescription)
-        .then((savedPrescription) => {
-            console.log("New prescription added to DB");
-            res.render('prescription', { prescription: savedPrescription });
-        })
-        .catch((err) => console.log(err));
+router.get('/prescription/:id', user.isLoggedIn, async function (req, res) {
+    const id = req.params.id;
+    const prescription = await PrescriptionController.getPrescription(id);
+    res.render('prescription', { prescription: prescription });
+});
+
+router.post('/prescription', user.isLoggedIn, async function (req, res) {
+    const newPrescription = PrescriptionController.generatePrescription(req);
+    const savedPrescription = await PrescriptionController.savePrescription(newPrescription);
+    res.redirect('/prescription/' + savedPrescription.id);
+});
+
+router.get('/profile', user.isLoggedIn, function (req, res) {
+    res.render('profile', { doctor: req.user });
+});
+
+router.post('/profile', user.isLoggedIn, function (req, res) {
+    var details = {
+        specialisation: req.body.specialisation,
+        hospital: {
+            name: req.body.hospitalName,
+            location: req.body.location,
+            email: req.body.emailID,
+            website: req.body.website,
+            contact: req.body.contact
+        },
+        hasUpdatedDetails: true
+    }
+    DoctorController.updateProfile(details, req.user.id);
+    res.redirect('/');
 });
 
 module.exports = router;
