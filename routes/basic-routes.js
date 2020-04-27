@@ -10,24 +10,24 @@ router.get('/', function (req, res) {
     res.render('index', { doctor: req.user, loggedIn: req.isAuthenticated() });
 });
 
-router.get('/prescription', user.isLoggedIn, function (req, res) {
-    res.render('form');
+router.get('/prescription', user.isLoggedIn, user.hasUpdatedDetails, function (req, res) {
+    res.render('form', { user: req.user, loggedIn: req.isAuthenticated() });
 });
 
-router.get('/prescription/:id', user.isLoggedIn, async function (req, res) {
+router.get('/prescription/:id', user.isLoggedIn, user.hasUpdatedDetails, async function (req, res) {
     const id = req.params.id;
     const prescription = await PrescriptionController.getPrescription(id);
-    res.render('prescription', { prescription: prescription });
+    res.render('prescription', { prescription: prescription, user: req.user, loggedIn: req.isAuthenticated() });
 });
 
-router.post('/prescription', user.isLoggedIn, async function (req, res) {
+router.post('/prescription', user.isLoggedIn, user.hasUpdatedDetails, async function (req, res) {
     const newPrescription = PrescriptionController.generatePrescription(req);
     const savedPrescription = await PrescriptionController.savePrescription(newPrescription);
     res.redirect('/prescription/' + savedPrescription.id);
 });
 
 router.get('/profile', user.isLoggedIn, function (req, res) {
-    res.render('profile', { doctor: req.user });
+    res.render('profile', { doctor: req.user, loggedIn: req.isAuthenticated() });
 });
 
 router.post('/profile', user.isLoggedIn, function (req, res) {
