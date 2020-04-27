@@ -24,6 +24,10 @@ header {
         font-size: 10vw !important;
     }
 
+    h3 {
+        font-size: 4vw !important;
+    }
+
     a.btn {
         font-size: 3vw !important;
     }
