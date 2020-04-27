@@ -1,0 +1,23 @@
+<nav class="navbar navbar-expand-lg navbar-dark display bg-primary disable-select sticky-top">
+    <button class="navbar-toggler border-0" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <a class="navbar-brand mr-auto" href="/">Team 1948</a>
+
+    <%- include('../partials/profile-badge', {visibility: "d-lg-none"}) %>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item active mx-3 my-auto">
+                <a class="nav-link" href="/">Home<span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item mx-3 my-auto">
+                <a class="nav-link" href="/prescription">New Prescription</a>
+            </li>
+            <li class="nav-item mx-3 my-auto">
+                <a class="nav-link" href="#">Verify Prescription</a>
+            </li>
+            <%- include('../partials/profile-badge', {visibility: "d-none d-lg-block"}) %>
+        </ul>
+    </div>
+</nav>

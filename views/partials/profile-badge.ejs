@@ -1,0 +1,20 @@
+<div class="nav-item dropdown mx-3 py-0 bg-warning rounded-border <%= visibility %>">
+    <div class="row align-items-center" role="button" data-display="static">
+        <div class="col-sm-3">
+            <a class="nav-link px-2" href="#">
+                <img src="<%= user.image %>" width="40" class="rounded-circle" alt="profile pic">
+            </a>
+        </div>
+        <div class="col-sm-9 d-none d-sm-block disable-select pl-1 cursor-pointer">
+            <p class="m-0 text-capitalize"><%= user.name.toLowerCase() %></p>
+            <p class="m-0"><%= user.email %></p>
+        </div>
+    </div>
+    <div class="dropdown-menu dropdown-menu-right bg-warning border-0 m-0 w-100">
+        <a class="dropdown-item px-2 px-sm-4" href="/profile">My Profile</a>
+        <a class="dropdown-item px-2 px-sm-4" href="/profile">Edit profile</a>
+        <a class="dropdown-item px-2 px-sm-4" href="#">View prescriptions</a>
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item px-2 px-sm-4" href="/auth/logout">Logout</a>
+    </div>
+</div>
