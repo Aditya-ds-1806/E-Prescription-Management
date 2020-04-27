@@ -9,4 +9,9 @@ currentUser.isLoggedIn = function isLoggedIn(req, res, next) {
     }
 };
 
+currentUser.hasUpdatedDetails = function (req, res, next) {
+    if (req.user.hasUpdatedDetails) next();
+    else res.redirect('/');
+}
+
 module.exports = currentUser;
