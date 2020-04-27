@@ -2,24 +2,39 @@ const newDrugButton = document.querySelector("#addNewDrug");
 const deleteEntry = document.querySelector("#deleteLastEntry");
 const prescription = document.querySelector("#prescription");
 
-newDrugButton.addEventListener("click", function (e) {
-    e.preventDefault();
-    var num = (0.25 * prescription.childElementCount).toString();
-    createNewFormInput("col-md-4", "drug" + num, "Drug", "Paracetamol");
-    createNewFormInput("col-md-2", "dosage" + num, "Dosage", "100mg");
-    createNewFormInput("col-md-2", "freq" + num, "Frequency", "1-0-0");
-    createNewFormInput("col-md-2", "duration" + num, "Duration", "5 days");
-});
+window.onload = generateNewRow;
+
+newDrugButton.addEventListener("click", generateNewRow);
 
 deleteEntry.addEventListener("click", function (e) {
     e.preventDefault();
     const len = prescription.childElementCount;
-    if (len > 4)
-        for (let i = len - 1; i >= len - 4; i--)
-            prescription.children[i].remove();
+    if (len > 2) {
+        prescription.children[len - 1].remove();
+        prescription.children[len - 2].remove();
+    }
 });
 
-function createNewFormInput(className, labelFor, labelText, placeholder) {
+function generateNewRow(e) {
+    e.preventDefault();
+    var row = document.createElement('div');
+    var num;
+    row.classList.add("form-row");
+    row.classList.add("justify-content-between");
+    row.classList.add("mb-1");
+    prescription.appendChild(row);
+    num = (0.5 * (prescription.childElementCount - 1)).toString();
+    var line = document.createElement("hr");
+    line.classList.add("border-primary");
+
+    createNewFormInput(row, "col-md-4", "drug" + num, "Drug", "Paracetamol");
+    createNewFormInput(row, "col-md-2", "dosage" + num, "Dosage", "100mg");
+    createNewFormInput(row, "col-md-2", "freq" + num, "Frequency", "1-0-0");
+    createNewFormInput(row, "col-md-2", "duration" + num, "Duration", "5 days");
+    prescription.appendChild(line);
+}
+
+function createNewFormInput(parent, className, labelFor, labelText, placeholder) {
     var div = document.createElement("div");
     var label = document.createElement("label");
     var input = document.createElement("input");
@@ -37,5 +52,5 @@ function createNewFormInput(className, labelFor, labelText, placeholder) {
     div.appendChild(label);
     div.appendChild(input);
 
-    prescription.appendChild(div);
+    parent.appendChild(div);
 }
