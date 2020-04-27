@@ -23,6 +23,7 @@ router.get('/prescription/:id', user.isLoggedIn, user.hasUpdatedDetails, async f
 router.post('/prescription', user.isLoggedIn, user.hasUpdatedDetails, async function (req, res) {
     const newPrescription = PrescriptionController.generatePrescription(req);
     const savedPrescription = await PrescriptionController.savePrescription(newPrescription);
+    DoctorController.addNewPrescription(savedPrescription.id, req.user.id);
     res.redirect('/prescription/' + savedPrescription.id);
 });
 

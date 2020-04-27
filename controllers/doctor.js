@@ -34,3 +34,15 @@ exports.updateProfile = function (details, id) {
         }
     });
 }
+
+exports.addNewPrescription = function (prescID, doctorID) {
+    Doctor.findByIdAndUpdate(doctorID, { $push: { "prescriptions": prescID } }, { new: true, upsert: true, useFindAndModify: false }, function (err, updatedProfile) {
+        if (err) {
+            console.error(err);
+        } else {
+            console.log("Prescription ID has been added to doctor's list");
+            console.log(updatedProfile);
+        }
+    });
+
+}

@@ -14,7 +14,11 @@ const doctorSchema = new mongoose.Schema({
     hasUpdatedDetails: {
         type: Boolean,
         default: false
-    }
+    },
+    prescriptions: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Prescription'
+    }]
 });
 
 module.exports = doctorSchema;
