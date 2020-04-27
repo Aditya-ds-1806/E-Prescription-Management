@@ -23,28 +23,39 @@
             </div>
             <% } %>
         </div>
-        <div class="row justify-content-around align-items-center mt-5">
-            <% if(!loggedIn) { %>
-            <div class="col-8 col-sm-4">
-                <a href="/auth/google" class="btn btn-light btn-lg mx-auto d-block">Sign in with Google</a>
+
+        <% if(!loggedIn) { %>
+        <div class="row justify-content-around align-items-center">
+            <div class="col-10 bg-info rounded my-5">
+                <h3 class="p-2 mb-0">Please sign in to generate new prescription</h3>
             </div>
-            <% } %>
-            <% if(loggedIn) { %>
-            <% if(doctor.hasUpdatedDetails) { %>
-            <div class="col-4">
+            <div class="col-8 col-sm-4">
+                <a href="/auth/google" class="btn btn-light btn-lg mx-auto d-block shadow-lg">Sign in with Google</a>
+            </div>
+        </div>
+        <% } %>
+
+        <% if(loggedIn && doctor.hasUpdatedDetails) { %>
+        <div class="row justify-content-around align-items-center mt-5">
+            <div class="col-6 col-md-4">
                 <a href="/prescription" class="btn btn-light btn-lg mx-auto d-block">New Prescription</a>
             </div>
-            <div class="col-4">
+            <div class="col-6 col-md-4">
                 <a href="" class="btn btn-light btn-lg mx-auto d-block">Verify Authenticity</a>
             </div>
-            <% } %>
-            <div class="col-4">
+        </div>
+        <% } %>
+
+        <% if(loggedIn) { %>
+        <div class="row justify-content-around align-items-center mt-3">
+            <div class="col-6 col-md-4">
                 <a href="/profile" class="btn btn-light btn-lg mx-auto d-block">Update Profile</a>
             </div>
-            <div class="col-4">
+            <div class="col-6 col-md-4">
                 <a href="/auth/logout" class="btn btn-light btn-lg mx-auto d-block">Logout</a>
             </div>
-            <% } %>
+        </div>
+        <% } %>
         </div>
     </header>
 </body>
