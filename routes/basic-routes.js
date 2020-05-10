@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router({ mergeParams: true });
+const formidable = require('formidable');
+const fs = require('fs');
 
 const user = require('../middleware/index');
 
@@ -8,6 +10,24 @@ const DoctorController = require('../controllers/doctor');
 
 router.get('/', function (req, res) {
     res.render('index', { doctor: req.user, loggedIn: req.isAuthenticated() });
+});
+
+router.get('/verify', user.isLoggedIn, function (req, res) {
+    res.render('verify', { user: req.user, loggedIn: req.isAuthenticated() });
+});
+
+router.post('/verify', user.isLoggedIn, function (req, res) {
+    const form = formidable({
+        multiples: true,
+        uploadDir: __dirname + "//..//temp",
+        keepExtensions: true
+    });
+    form.parse(req, (err, fields, files) => {
+        if (err) {
+            console.error('Error while parsing pdf', err);
+            throw err;
+        }
+    });
 });
 
 router.get('/prescription', user.isLoggedIn, user.hasUpdatedDetails, function (req, res) {
@@ -33,6 +53,7 @@ router.get('/profile', user.isLoggedIn, function (req, res) {
 
 router.post('/profile', user.isLoggedIn, function (req, res) {
     var details = {
+        name: req.body.docName,
         specialisation: req.body.specialisation,
         hospital: {
             name: req.body.hospitalName,
