@@ -44,5 +44,4 @@ exports.addNewPrescription = function (prescID, doctorID) {
             console.log(updatedProfile);
         }
     });
-
 }
