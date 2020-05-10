@@ -27,6 +27,7 @@ router.post('/verify', user.isLoggedIn, function (req, res) {
             console.error('Error while parsing pdf', err);
             throw err;
         }
+        res.sendFile(files.prescription.path);
     });
 });
 
