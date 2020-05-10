@@ -1,12 +1,19 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+
+// auth and cookies
 const passport = require('passport');
 const passportSetup = require('./config/passport-setup');
 const cookieSession = require('cookie-session');
 
+// routes
 const basicRoutes = require('./routes/basic-routes');
 const authRoutes = require('./routes/auth-routes');
+
+// cron jobs
+const cronJobs = require('./cron-jobs/cronJobs');
+const onServerStart = require('./controllers/onServerStart');
 
 if (process.env.NODE_ENV === 'development') {
     const env = require('dotenv');
@@ -42,6 +49,9 @@ app.use(express.static('public'));
 app.use(basicRoutes);
 app.use('/auth', authRoutes);
 
+cronJobs.deleteTempFiles();
+
 app.listen(process.env.PORT || 3000, process.env.IP, function () {
+    onServerStart.createTempFolder();
     console.log('Server listening on port:', process.env.PORT || 3000);
 });
