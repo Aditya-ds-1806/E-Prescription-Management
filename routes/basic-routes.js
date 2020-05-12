@@ -17,17 +17,58 @@ router.get('/verify', user.isLoggedIn, function (req, res) {
 });
 
 router.post('/verify', user.isLoggedIn, function (req, res) {
+    const tempPath = __dirname + "//..//temp";
     const form = formidable({
         multiples: true,
-        uploadDir: __dirname + "//..//temp",
+        uploadDir: tempPath,
         keepExtensions: true
     });
     form.parse(req, (err, fields, files) => {
         if (err) {
             console.error('Error while parsing pdf', err);
             throw err;
+        } else if (files.prescription.type !== "image/png") {
+            res.send("Incorrect file format, only PNG supported!");
+        } else {
+            // const prscID = fields.prscID;
+            const Jimp = require('jimp');
+            Jimp.read(files.prescription.path)
+                .then(image => {
+                    image.greyscale();
+                    image.resize(Jimp.AUTO, 512);
+                    return image.writeAsync(files.prescription.path);
+                })
+                .then(async image => {
+                    console.log("Done greyscaling and editing");
+                    const Fourier = require('../controllers/fourier/fourier');
+                    var pixelMatrix = [];
+                    var fft = [];
+                    image.scan(0, 0, image.bitmap.width, image.bitmap.height, function (x, y, idx) {
+                        pixelMatrix.push(this.bitmap.data[idx]);
+                        if (x === image.bitmap.width - 1 && y === image.bitmap.height - 1) {
+                            const lowerPowerOf2 = Math.floor(Math.log2(pixelMatrix.length));
+                            const higherPowerOf2 = lowerPowerOf2 + 1;
+                            const zeroPadLength = Math.pow(2, higherPowerOf2) - pixelMatrix.length;
+                            for (let i = 0; i < zeroPadLength; i++) {
+                                pixelMatrix.push(255);
+                            }
+                        }
+                    });
+                    console.log("Image scan successful, retreived Image matrix", pixelMatrix.length);
+                    Fourier.transform(pixelMatrix, fft);
+                    const dims = [image.bitmap.width, image.bitmap.height];
+                    pixelMatrix = Fourier.shift(pixelMatrix, dims);
+                    console.log("Computed fft");
+                    image.scan(0, 0, image.bitmap.width, image.bitmap.height, function (x, y, idx) {
+                        this.setPixelColor(pixelMatrix[x + y * x], x, y);
+                    });
+                    image.write(tempPath + "//fft.png");
+                    res.sendFile('fft.png', { root: tempPath });
+                })
+                .catch(err => {
+                    console.error(err);
+                });
         }
-        res.sendFile(files.prescription.path);
     });
 });
 
