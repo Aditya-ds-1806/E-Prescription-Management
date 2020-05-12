@@ -16,9 +16,12 @@
     <% } %>
     <article class="container mt-5">
         <form method="POST" enctype="multipart/form-data" action="/verify">
+            <label for="prscID">Prescription ID</label>
+            <input type="text" id="prscID" name="prscID" value="5eb6be8940286645f414312c"
+                placeholder="5eb6be8940286645f414312c" required>
             <div>
                 <label for="prescription">Choose file to upload</label>
-                <input type="file" id="prescription" name="prescription" accept=".pdf">
+                <input type="file" id="prescription" name="prescription" accept=".png" required>
             </div>
             <div>
                 <button class="btn btn-primary">Submit</button>
