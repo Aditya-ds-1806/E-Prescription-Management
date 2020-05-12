@@ -16,6 +16,7 @@
     "ejs": "^3.0.1",
     "express": "^4.17.1",
     "formidable": "^1.2.2",
+    "jimp": "^0.10.3",
     "mongoose": "^5.9.7",
     "node-cron": "^2.0.3",
     "passport": "^0.4.1",
