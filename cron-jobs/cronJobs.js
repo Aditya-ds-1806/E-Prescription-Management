@@ -3,7 +3,7 @@ const cron = require('node-cron');
 
 var cronjob = {};
 cronjob.deleteTempFiles = function () {
-    cron.schedule("*/10 * * * *", function () {
+    cron.schedule("0 */1 * * *", function () {
         fs.readdir('./temp', (err, files) => {
             if (err) {
                 console.error(err);
@@ -12,7 +12,9 @@ cronjob.deleteTempFiles = function () {
             if (files.length) {
                 console.log("Started deleting temp files...", Date());
                 files.forEach(file => {
-                    fs.unlink(__dirname + "//..//temp//" + file, (err) => { if (err) throw err });
+                    var createdTime = fs.statSync(__dirname + "//..//temp//" + file).birthtimeMs;
+                    if (Date.now() - createdTime > 3600000) // delete files older than an hour
+                        fs.unlink(__dirname + "//..//temp//" + file, (err) => { if (err) throw err });
                 });
                 console.log("DONE!", Date());
             }
