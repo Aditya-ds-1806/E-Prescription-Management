@@ -89,6 +89,20 @@ router.post('/prescription', user.isLoggedIn, user.hasUpdatedDetails, async func
     res.redirect('/prescription/' + savedPrescription.id);
 });
 
+router.post('/prscImg', function (req, res) {
+    var base64EncodedImage = req.body.image;
+    const fileName = req.body.prscID;
+    base64EncodedImage = base64EncodedImage.replace(/^data:image\/png;base64,/, "");
+    fs.writeFileSync(__dirname + "//..//temp//" + fileName + ".png", base64EncodedImage, 'base64');
+    console.log("Saved Image");
+    res.sendStatus(200);
+});
+
+router.get('/download', function (req, res) {
+    var fileName = req.query.id + ".png";
+    res.download(__dirname + "//..//temp//" + fileName);
+});
+
 router.get('/profile', user.isLoggedIn, function (req, res) {
     res.render('profile', { doctor: req.user, loggedIn: req.isAuthenticated() });
 });
