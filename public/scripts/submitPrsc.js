@@ -7,8 +7,7 @@ downloadButton.addEventListener('click', function (e) {
     window.scroll(0, 0);
     html2canvas(document.querySelector("article"), {
         x: 300,
-        width: 900,
-        allowTaint: true
+        width: 900
     }).then(function (canvas) {
         window.scroll(0, scrollPos);
         var base64EncodedImg = canvas.toDataURL('image/png');
