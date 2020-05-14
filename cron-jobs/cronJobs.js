@@ -12,11 +12,37 @@ cronjob.deleteTempFiles = function () {
             if (files.length) {
                 console.log("Started deleting temp files...", Date());
                 files.forEach(file => {
-                    var createdTime = fs.statSync(__dirname + "//..//temp//" + file).birthtimeMs;
-                    if (Date.now() - createdTime > 3600000) // delete files older than an hour
-                        fs.unlink(__dirname + "//..//temp//" + file, (err) => { if (err) throw err });
+                    if (file.endsWith('.png')) {
+                        var createdTime = fs.statSync(__dirname + "//..//temp//" + file).birthtimeMs;
+                        if (Date.now() - createdTime > 3600000) { // delete files older than an hour
+                            fs.unlink(__dirname + "//..//temp//" + file, (err) => { if (err) throw err });
+                            console.log("Deleted", file);
+                        }
+                    }
                 });
-                console.log("DONE!", Date());
+            }
+        });
+    });
+}
+
+cronjob.deleteUploads = function () {
+    cron.schedule("* * * * * *", function () {
+        fs.readdir('./temp/uploaded', (err, files) => {
+            if (err) {
+                console.error(err);
+                throw err;
+            }
+            if (files.length) {
+                console.log("Started deleting temp files...", Date());
+                files.forEach(file => {
+                    if (file.endsWith('.png')) {
+                        var createdTime = fs.statSync(__dirname + "//..//temp//uploaded//" + file).birthtimeMs;
+                        if (Date.now() - createdTime > 3600000) { // delete files older than an hour
+                            fs.unlink(__dirname + "//..//temp//uploaded//" + file, (err) => { if (err) throw err });
+                            console.log("Deleted", file);
+                        }
+                    }
+                });
             }
         });
     });
