@@ -26,7 +26,7 @@ cronjob.deleteTempFiles = function () {
 }
 
 cronjob.deleteUploads = function () {
-    cron.schedule("* * * * * *", function () {
+    cron.schedule("0 */1 * * *", function () {
         fs.readdir('./temp/uploaded', (err, files) => {
             if (err) {
                 console.error(err);
