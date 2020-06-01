@@ -22,15 +22,13 @@ if (process.env.NODE_ENV === 'development') {
 
 const app = express();
 
-mongoose.connect(process.env.DATABASEURL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-})
-    .then(() => console.log('Connected to DB'))
-    .catch((err) => {
-        console.log("Couldn't connect to DB");
-        console.error(err);
+(async () => {
+    await mongoose.connect(process.env.DATABASEURL, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
     });
+    console.log('Connected to DB')
+})();
 
 
 app.set('view engine', 'ejs');
