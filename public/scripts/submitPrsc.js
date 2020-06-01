@@ -7,7 +7,7 @@ downloadButton.addEventListener('click', async function (e) {
     spinner.classList.remove('d-none');
     var scrollPos = window.scrollY;
     window.scroll(0, 0);
-    var canvas = await html2canvas(document.querySelector("article"));
+    var canvas = await html2canvas(document.querySelector("article")).catch(err => console.error(err));
     window.scroll(0, scrollPos);
     var base64EncodedImg = canvas.toDataURL('image/png');
     $.ajax({
