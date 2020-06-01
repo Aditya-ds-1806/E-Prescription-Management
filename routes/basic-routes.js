@@ -35,9 +35,14 @@ router.post('/verify', user.isLoggedIn, function (req, res) {
             const prscID = fields.prscID;
             var uploadedFilePath = downloadPath + prscID + ".png";
             fs.renameSync(files.prescription.path, uploadedFilePath);
-            var frImage = await FFTUtils.getFourierImage(uploadedFilePath);
-            const diffPercent = await FFTUtils.compareImages(tempPath + prscID + ".png", frImage);
-            res.send(diffPercent === 0);
+            try {
+                var frImage = await FFTUtils.getFourierImage(uploadedFilePath, prscID);
+                const diffPercent = await FFTUtils.compareImages(tempPath + prscID + ".png", frImage);
+                res.send(diffPercent === 0);
+            } catch (err) {
+                res.send(false);
+                console.error(err);
+            }
         }
     });
 });
@@ -60,7 +65,8 @@ router.post('/prescription', user.isLoggedIn, user.hasUpdatedDetails, async func
 });
 
 router.post('/prscImg', user.isLoggedIn, user.hasUpdatedDetails, async function (req, res) {
-    const FFTUtils = require('../controllers/fourier/FFTUtils')
+    const FFTUtils = require('../controllers/fourier/FFTUtils');
+
     var fileName = req.body.prscID + ".png";
     const tempPath = __dirname + "//..//temp//";
     const uploadedFilePath = tempPath + "prsc-" + fileName;
@@ -69,7 +75,8 @@ router.post('/prscImg', user.isLoggedIn, user.hasUpdatedDetails, async function 
 
     base64EncodedImage = base64EncodedImage.replace(/^data:image\/png;base64,/, "");
     fs.writeFileSync(uploadedFilePath, base64EncodedImage, 'base64');
-    var fourierImage = await FFTUtils.getFourierImage(uploadedFilePath);
+
+    var fourierImage = await FFTUtils.getFourierImage(uploadedFilePath, req.body.prscID);
     fourierImage.write(savedFilePath);
     console.log("Saved Image");
     res.sendStatus(200);
@@ -79,7 +86,6 @@ router.get('/download', user.isLoggedIn, user.hasUpdatedDetails, function (req, 
     const fs = require('fs');
     var fileName = "prsc-" + req.query.id + ".png";
     res.download(__dirname + "//..//temp//" + fileName);
-    // fs.unlinkSync(__dirname + "//..//temp//" + fileName);
 });
 
 router.get('/profile', user.isLoggedIn, function (req, res) {
