@@ -16,7 +16,7 @@ exports.addNewDoctor = async function (profile, done) {
             email: profile.emails[0].value
         });
         const addedUser = await newDoctor.save().catch((err) => {
-            console.log(err);
+            console.error(err);
             res.redirect('/');
         });
         console.log(addedUser.name + ' was added to the DB');
