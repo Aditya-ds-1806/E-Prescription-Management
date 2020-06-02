@@ -16,8 +16,9 @@ function getPixelsFromMag(mag, dims, logOfMaxMag) {
 }
 
 function padZeros(matrix) {
-    const lowerPowerOf2 = Math.floor(Math.log2(matrix.length));
-    if (!Number.isInteger(lowerPowerOf2)) {
+    var a = Math.log2(matrix.length);
+    if (!Number.isInteger(a)) {
+        const lowerPowerOf2 = Math.floor(a);
         const higherPowerOf2 = lowerPowerOf2 + 1;
         const zeroPadLength = Math.pow(2, higherPowerOf2) - matrix.length;
         for (let i = 0; i < zeroPadLength; i++) {
@@ -57,7 +58,6 @@ img.getFourierImage = async function (uploadedFilePath, id) {
     Fourier.transform(pixelMatrix, fft);
     // Shift the lower freqeuncy components towards the center
     fft = Fourier.shift(fft, dims);
-    console.log("True fft length", fft.length);
     // Compute magnitudes of complex coefficients
     for (let i = 0; i < fft.length; i++) {
         magnitudes[i] = Math.sqrt(fft[i].real * fft[i].real + fft[i].imag * fft[i].imag);
