@@ -1,6 +1,6 @@
 var img = {};
 const Jimp = require('jimp');
-const cc = 9e-3; // contrast constant
+const cc = 1e-2; // contrast constant
 
 
 function getPixelsFromMag(mag, dims, logOfMaxMag) {
@@ -46,7 +46,7 @@ img.getPixelMatrix = function (image) {
 
 img.getFourierImage = async function (uploadedFilePath, id) {
     const Fourier = require('./fourier');
-    // const prescription = require('../prescription');
+    const shuffle = require('knuth-shuffle-seeded');
     var fft = [], magnitudes = [];
 
     var image = await Jimp.read(uploadedFilePath).catch((err) => console.error(err));
@@ -66,9 +66,11 @@ img.getFourierImage = async function (uploadedFilePath, id) {
     var maxMag = magnitudes.reduce((max, v) => max >= v ? max : v);
     var logOfMaxMag = Math.log((cc * maxMag) + 1);
     var colors = getPixelsFromMag(magnitudes, dims, logOfMaxMag);
+    shuffle(colors, id);
     // Change original greyscale pixel values into fourier domain image's pixel values
     image.scan(0, 0, dims[0], dims[1], function (x, y, idx) {
-        this.setPixelColor(colors[dims[0] * y + x], x, y);
+        var color = colors[dims[0] * y + x];
+        this.setPixelColor(Jimp.rgbaToInt(color, color, color, 255), x, y);
     });
     console.log('Fourier Image created');
     return { image: image, fft: fft };
@@ -77,6 +79,7 @@ img.getFourierImage = async function (uploadedFilePath, id) {
 img.reconstruct = function (fft, dims) {
     const Fourier = require('./fourier');
     var pixels = [], colors = [];
+    console.log("Reconstruction began");
     fft = Fourier.unshift(fft, dims);
     console.log("unshift done");
     padZeros(fft);
@@ -87,9 +90,9 @@ img.reconstruct = function (fft, dims) {
             colors[y * dims[0] + x] = Math.round(0.01 * Math.round(100 * pixels[y * dims[0] + x]));
     var originalImage = new Jimp(dims[0], dims[1]);
     originalImage.scan(0, 0, dims[0], dims[1], function (x, y, idx) {
-        var color = 255 - colors[dims[0] * y + x];
-        if (color < 0) color = 0;
-        this.setPixelColor(color, x, y);
+        var color = colors[dims[0] * y + x];
+        if (color > 255) color = 255;
+        this.setPixelColor(Jimp.rgbaToInt(color, color, color, 255), x, y);
     });
     return originalImage;
 }
