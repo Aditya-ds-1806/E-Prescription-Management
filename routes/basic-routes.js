@@ -37,7 +37,7 @@ router.post('/verify', user.isLoggedIn, function (req, res) {
             fs.renameSync(files.prescription.path, uploadedFilePath);
             try {
                 var frImage = await FFTUtils.getFourierImage(uploadedFilePath, prscID);
-                const diffPercent = await FFTUtils.compareImages(tempPath + prscID + ".png", frImage);
+                const diffPercent = await FFTUtils.compareImages(tempPath + prscID + ".png", frImage.image);
                 res.send(diffPercent === 0);
             } catch (err) {
                 res.send(false);
