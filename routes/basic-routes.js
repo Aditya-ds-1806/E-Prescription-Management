@@ -66,8 +66,7 @@ router.post('/prescription', user.isLoggedIn, user.hasUpdatedDetails, async func
 
 router.post('/prscImg', user.isLoggedIn, user.hasUpdatedDetails, async function (req, res) {
     const FFTUtils = require('../controllers/fourier/FFTUtils');
-
-    var fileName = req.body.prscID + ".png";
+    const fileName = req.body.prscID + ".png";
     const tempPath = __dirname + "//..//temp//";
     const uploadedFilePath = tempPath + "prsc-" + fileName;
     const savedFilePath = tempPath + fileName;
@@ -76,14 +75,19 @@ router.post('/prscImg', user.isLoggedIn, user.hasUpdatedDetails, async function 
     base64EncodedImage = base64EncodedImage.replace(/^data:image\/png;base64,/, "");
     fs.writeFileSync(uploadedFilePath, base64EncodedImage, 'base64');
 
-    var fourierImage = await FFTUtils.getFourierImage(uploadedFilePath, req.body.prscID);
+    var fourier = await FFTUtils.getFourierImage(uploadedFilePath, req.body.prscID);
+    var fourierImage = fourier.image;
+    var fft = fourier.fft;
     fourierImage.write(savedFilePath);
     console.log("Saved Image");
     res.sendStatus(200);
+    // Compute IFFT
+    var originalImage = FFTUtils.reconstruct(fft, [fourierImage.bitmap.width, fourierImage.bitmap.height]);
+    originalImage.write(tempPath + "original.png");
+    console.log("Generated original image");
 });
 
 router.get('/download', user.isLoggedIn, user.hasUpdatedDetails, function (req, res) {
-    const fs = require('fs');
     var fileName = "prsc-" + req.query.id + ".png";
     res.download(__dirname + "//..//temp//" + fileName);
 });
