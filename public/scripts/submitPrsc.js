@@ -6,19 +6,21 @@ downloadButton.addEventListener('click', async function (e) {
     e.preventDefault();
     spinner.classList.remove('d-none');
     var scrollPos = window.scrollY;
+    document.body.style.overflowY = 'hidden';
     window.scroll(0, 0);
     var canvas = await html2canvas(document.querySelector("article")).catch(err => console.error(err));
     window.scroll(0, scrollPos);
+    document.body.style.overflowY = 'visible';
     var base64EncodedImg = canvas.toDataURL('image/png');
     $.ajax({
         type: "POST",
         url: "/prscImg",
         data: { image: base64EncodedImg, prscID: prscID },
         success: function (res) {
-            spinner.classList.add('d-none');
-            console.log(res);
-            var win = window.open();
-            win.location = "/download?id=" + prscID;
+            if (res === 'OK') {
+                spinner.classList.add('d-none');
+                window.open("/download?id=" + prscID, '_self').close();
+            }
         }
     });
 });
