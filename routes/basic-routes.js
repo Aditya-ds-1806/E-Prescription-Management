@@ -90,6 +90,10 @@ router.post('/prscImg', user.isLoggedIn, user.hasUpdatedDetails, async function 
 router.get('/download', user.isLoggedIn, user.hasUpdatedDetails, function (req, res) {
     var fileName = "prsc-" + req.query.id + ".png";
     res.download(__dirname + "//..//temp//" + fileName);
+    setTimeout(() => {
+        fs.unlinkSync(__dirname + "//..//temp//" + fileName);
+        console.log('deleted user copy of prescription');
+    }, 60000); // Delete the sent file after a minute
 });
 
 router.get('/profile', user.isLoggedIn, function (req, res) {
