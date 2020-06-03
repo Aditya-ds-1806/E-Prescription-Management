@@ -19,7 +19,7 @@ downloadButton.addEventListener('click', async function (e) {
         success: function (res) {
             if (res === 'OK') {
                 spinner.classList.add('d-none');
-                window.open("/download?id=" + prscID, '_self').close();
+                window.open("/download?id=" + prscID, '_self');
             }
         }
     });
