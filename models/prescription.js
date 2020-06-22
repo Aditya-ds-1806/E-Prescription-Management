@@ -1,18 +1,20 @@
 const mongoose = require('mongoose');
 const medicineSchema = require('./medicines');
-const patientSchema = require('./patient');
 
 const prescriptionSchema = new mongoose.Schema({
     doctor: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Doctor'
+        ref: 'User'
     },
     date: {
         type: Date,
         default: Date.now()
     },
     medicines: [medicineSchema],
-    patient: patientSchema,
+    patient: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }
 });
 
 const Prescription = mongoose.model('Prescription', prescriptionSchema);
