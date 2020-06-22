@@ -1,11 +1,13 @@
 const mongoose = require('mongoose');
 const hospitalSchema = require('./hospital');
 
-const doctorSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
     name: String,
     googleID: String,
     image: String,
     email: String,
+    age: Number,
+    address: String,
     specialisation: {
         type: String,
         default: ""
@@ -18,7 +20,11 @@ const doctorSchema = new mongoose.Schema({
     prescriptions: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Prescription'
-    }]
+    }],
+    role: {
+        type: String,
+        default: null
+    }
 });
 
-module.exports = doctorSchema;
+module.exports = userSchema;
