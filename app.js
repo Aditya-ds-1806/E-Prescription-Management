@@ -42,6 +42,7 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
 app.use(express.static('public'));
 app.use(basicRoutes);
@@ -49,6 +50,10 @@ app.use('/auth', authRoutes);
 
 cronJobs.deleteTempFiles();
 cronJobs.deleteUploads();
+
+app.get('*', function (req, res) {
+    res.redirect('/');
+});
 
 app.listen(process.env.PORT || 3000, process.env.IP, function () {
     onServerStart.createTempFolder();
