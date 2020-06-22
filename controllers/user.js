@@ -1,21 +1,21 @@
 const mongoose = require('mongoose');
-const doctorSchema = require('../models/doctor');
+const userSchema = require('../models/user');
 
-const Doctor = mongoose.model('Doctor', doctorSchema);
+const User = mongoose.model('User', userSchema);
 
-exports.addNewDoctor = async function (profile, done) {
-    const user = await Doctor.findOne({ googleID: profile.id });
+exports.addNewUser = async function (profile, done) {
+    const user = await User.findOne({ googleID: profile.id });
     if (user) {
         console.log('User exists in DB: ', user.email);
         done(null, user);
     } else {
-        var newDoctor = new Doctor({
+        var newUser = new User({
             name: profile.name.givenName,
             googleID: profile.id,
             image: profile.photos[0].value,
             email: profile.emails[0].value
         });
-        const addedUser = await newDoctor.save().catch((err) => {
+        const addedUser = await newUser.save().catch((err) => {
             console.error(err);
             res.redirect('/');
         });
@@ -25,23 +25,25 @@ exports.addNewDoctor = async function (profile, done) {
 }
 
 exports.updateProfile = function (details, id) {
-    Doctor.findByIdAndUpdate(id, details, { useFindAndModify: false }, function (err, updatedProfile) {
+    User.findByIdAndUpdate(id, details, { useFindAndModify: false }, function (err, updatedProfile) {
         if (err) {
             console.error(err);
         } else {
             console.log('Details updated succesfully');
-            console.log(updatedProfile);
         }
     });
 }
 
-exports.addNewPrescription = function (prescID, doctorID) {
-    Doctor.findByIdAndUpdate(doctorID, { $push: { "prescriptions": prescID } }, { new: true, upsert: true, useFindAndModify: false }, function (err, updatedProfile) {
+exports.addNewPrescription = function (prescID, userID) {
+    User.findByIdAndUpdate(userID, { $push: { "prescriptions": prescID } }, { new: true, upsert: true, useFindAndModify: false }, function (err, updatedProfile) {
         if (err) {
             console.error(err);
         } else {
             console.log("Prescription ID has been added to doctor's list");
-            console.log(updatedProfile);
         }
     });
+}
+
+exports.setRole = function (id, role) {
+    User.findByIdAndUpdate(id, { role: role }, { useFindAndModify: false, new: true }, (err, res) => { if (err) throw err });
 }
