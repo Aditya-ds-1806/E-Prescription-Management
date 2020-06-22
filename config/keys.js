@@ -6,4 +6,4 @@ var keys = {
     }
 };
 
-module.exports = key;
+module.exports = keys;
