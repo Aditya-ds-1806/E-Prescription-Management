@@ -4,19 +4,24 @@
     </button>
     <a class="navbar-brand mr-auto" href="/">Team 1948</a>
 
-    <%- include('../partials/profile-badge', {visibility: "d-lg-none"}) %>
+    <%- include('../partials/profile-badge', {visibility: "d-lg-none", user: user}) %>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav ml-auto">
             <li class="nav-item active mx-3 my-auto">
                 <a class="nav-link" href="/">Home<span class="sr-only">(current)</span></a>
             </li>
+            <% if(user.role === 'doctor') { %>
             <li class="nav-item mx-3 my-auto">
                 <a class="nav-link" href="/prescription">New Prescription</a>
             </li>
+            <% } %>
+
+            <% if(user.role === 'pharmacist') { %>
             <li class="nav-item mx-3 my-auto">
                 <a class="nav-link" href="/verify">Verify Prescription</a>
             </li>
+            <% } %>
             <%- include('../partials/profile-badge', {visibility: "d-none d-lg-block"}) %>
         </ul>
     </div>
