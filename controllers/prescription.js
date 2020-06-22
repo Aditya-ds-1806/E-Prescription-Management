@@ -1,7 +1,12 @@
+const mongoose = require('mongoose');
+const userSchema = require('../models/user');
+const User = mongoose.model('User', userSchema);
+
 const Prescription = require('../models/prescription').model;
 
-exports.generatePrescription = function (req) {
+exports.generatePrescription = async function (req) {
     const medicineCount = 0.25 * (Object.keys(req.body).length - 4);
+    const patientId = (await User.findOneAndUpdate({ email: req.body.patientEmail }, { age: req.body.age, address: req.body.address }, { useFindAndModify: false }))._id;
     var medicines = [];
     for (let i = 0; i < medicineCount; i++) {
         var medicine = {
@@ -12,18 +17,12 @@ exports.generatePrescription = function (req) {
         }
         medicines.push(medicine);
     }
-
     const prescription = {
         doctor: req.user.id,
         medicines: medicines,
-        patient: {
-            name: req.body.patientName,
-            age: req.body.age,
-            address: req.body.address,
-            contact: req.body.patientContact
-        }
+        patient: patientId
     };
-    return prescription;
+    return { prescription, patientId };
 }
 
 exports.savePrescription = async function (newPrescription) {
@@ -33,7 +32,8 @@ exports.savePrescription = async function (newPrescription) {
 
 exports.getPrescription = async function (id) {
     const prsc = await Prescription.findById(id);
-    return await prsc.populate('doctor').execPopulate();
+    if (prsc !== null) return await prsc.populate('doctor').populate('patient').execPopulate();
+    return false;
 }
 
 exports.getKernelFromID = function (id) {
