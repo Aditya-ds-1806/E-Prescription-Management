@@ -17,9 +17,10 @@
                 <h1 class="display-2 text-uppercase"><strong>E-Prescription Management System</strong></h1>
             </div>
             <% if(loggedIn) { %>
-            <img class="rounded-circle img-fluid" src="<%= doctor.image %>" alt="Profile picture">
+            <img class="rounded-circle img-fluid w-25" src="<%= user.image %>" alt="Profile picture">
             <div class="col-12">
-                <h1 class="display-4 text-capitalize">Dr. <%= doctor.name.toLowerCase() %></h1>
+                <h1 class="display-4 text-capitalize"><% if(user.role === 'doctor') { %>Dr.
+                    <% } %><%= user.name.toLowerCase() %></h1>
             </div>
             <% } %>
         </div>
@@ -35,22 +36,33 @@
         </div>
         <% } %>
 
-        <% if(loggedIn && doctor.hasUpdatedDetails) { %>
+        <% if(loggedIn) { %>
         <div class="row justify-content-around align-items-center mt-5">
+            <% if(user.hasUpdatedDetails) { %>
             <div class="col-6 col-md-4">
                 <a href="/prescription" class="btn btn-light btn-lg mx-auto d-block">New Prescription</a>
             </div>
+            <% } %>
+
+            <% if(user.role === 'pharmacist') { %>
             <div class="col-6 col-md-4">
                 <a href="/verify" class="btn btn-light btn-lg mx-auto d-block">Verify Authenticity</a>
             </div>
+            <% } %>
         </div>
-        <% } %>
 
-        <% if(loggedIn) { %>
         <div class="row justify-content-around align-items-center mt-3">
+            <% if(user.role === 'doctor') { %>
             <div class="col-6 col-md-4">
                 <a href="/profile" class="btn btn-light btn-lg mx-auto d-block">Update Profile</a>
             </div>
+            <% } %>
+
+            <% if(user.role === 'doctor' || user.role === 'patient') { %>
+            <div class="col-6 col-md-4">
+                <a href="/prescriptions/list" class="btn btn-light btn-lg mx-auto d-block">My Prescriptions</a>
+            </div>
+            <% } %>
             <div class="col-6 col-md-4">
                 <a href="/auth/logout" class="btn btn-light btn-lg mx-auto d-block">Logout</a>
             </div>

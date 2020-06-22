@@ -11,14 +11,15 @@
 </head>
 
 <body>
-    <% if(loggedIn && doctor.hasUpdatedDetails) { %>
-    <%- include('./partials/navbar', {user: doctor}) %>
+    <% if(loggedIn && user.hasUpdatedDetails) { %>
+    <%- include('./partials/navbar', {user: user}) %>
     <% } %>
     <div class="container mt-5">
         <div class="text-center">
-            <img class="rounded-circle img-fluid" src="<%= doctor.image %>" alt="profile photo">
+            <img class="rounded-circle img-fluid" src="<%= user.image %>" alt="profile photo">
+            <p class="text-primary my-2">Edit details by double clicking on the field</p>
         </div>
-        <%- include('../views/partials/profile-details.ejs', {doctor: doctor}) %>
+        <%- include('../views/partials/profile-details.ejs', {user: user}) %>
     </div>
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
         integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
