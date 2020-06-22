@@ -38,7 +38,8 @@ router.post('/verify', user.isLoggedIn, user.isPharmacist, function (req, res) {
             try {
                 var frImage = await FFTUtils.getFourierImage(uploadedFilePath, prscID);
                 const diffPercent = await FFTUtils.compareImages(tempPath + prscID + ".png", frImage.image);
-                res.send(diffPercent === 0);
+                if (diffPercent === 0) return res.send(new Buffer.from(fs.readFileSync(uploadedFilePath)).toString('base64'));
+                res.send(false);
             } catch (err) {
                 res.send(false);
                 console.error(err);
