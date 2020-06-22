@@ -6,27 +6,21 @@ const currentUser = require('../middleware/index');
 router.get(
     '/google',
     passport.authenticate('google', {
-        hd: 'iiitdm.ac.in',
         prompt: 'select_account',
         scope: ['profile', 'email']
     })
 );
 
-// Google will redirect to this route after auth
 router.get('/google/redirect', passport.authenticate('google'), function (req, res) {
-    console.log('I went to /google/callback');
-    console.log(req.user);
-    // req.flash('success', 'Welcome Back ' + req.user.username);
-    if (req.user.hasUpdatedDetails) {
-        res.redirect('/');
-    } else {
-        res.redirect('/profile');
+    if (req.user.role !== null) {
+        if (req.user.hasUpdatedDetails) return res.redirect('/');
+        return res.redirect('/profile');
     }
+    res.redirect('/role');
 });
 
 router.get('/logout', currentUser.isLoggedIn, function (req, res) {
     req.logout();
-    // req.flash('success', 'You have been logged out succesfully!');
     res.redirect('/');
 });
 
