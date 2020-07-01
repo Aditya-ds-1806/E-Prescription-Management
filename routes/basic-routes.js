@@ -31,12 +31,13 @@ router.post('/verify', user.isLoggedIn, user.isPharmacist, function (req, res) {
         } else if (files.prescription.type !== "image/png") {
             res.send("Incorrect file format, only PNG supported!");
         } else {
+            const { getPatientID } = require('../controllers/user');
             const FFTUtils = require('../controllers/fourier/FFTUtils');
             const prscID = fields.prscID;
             var uploadedFilePath = downloadPath + prscID + ".png";
             fs.renameSync(files.prescription.path, uploadedFilePath);
             try {
-                var frImage = await FFTUtils.getFourierImage(uploadedFilePath, req.user.id);
+                var frImage = await FFTUtils.getFourierImage(uploadedFilePath, await getPatientID(prscID));
                 const diffPercent = await FFTUtils.compareImages(tempPath + prscID + ".png", frImage.image);
                 if (diffPercent === 0) return res.send(new Buffer.from(fs.readFileSync(uploadedFilePath)).toString('base64'));
                 res.send(false);
@@ -73,6 +74,7 @@ router.get('/prescriptions/list', user.isLoggedIn, user.isNotPharma, function (r
 });
 
 router.post('/prscImg', user.isLoggedIn, user.isNotPharma, async function (req, res) {
+    const { getPatientID } = require('../controllers/user');
     const FFTUtils = require('../controllers/fourier/FFTUtils');
     const fileName = req.body.prscID + ".png";
     const tempPath = __dirname + "//..//temp//";
@@ -83,7 +85,7 @@ router.post('/prscImg', user.isLoggedIn, user.isNotPharma, async function (req, 
     base64EncodedImage = base64EncodedImage.replace(/^data:image\/png;base64,/, "");
     fs.writeFileSync(uploadedFilePath, base64EncodedImage, 'base64');
 
-    var fourier = await FFTUtils.getFourierImage(uploadedFilePath, req.user);
+    var fourier = await FFTUtils.getFourierImage(uploadedFilePath, await getPatientID(req.body.prscID));
     var fourierImage = fourier.image;
     var fft = fourier.fft;
     fourierImage.write(savedFilePath);
