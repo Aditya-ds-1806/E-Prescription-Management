@@ -30,7 +30,7 @@ submit.addEventListener('click', function (e) {
                 var image = new Image();
                 image.src = "data:image/png;base64," + res;
                 image.setAttribute('style', 'height: 100vmin');
-                win.addEventListener('load', function () {
+                win.addEventListener('focus', function () {
                     this.document.write(image.outerHTML);
                     this.document.body.setAttribute('style', 'display: flex; justify-content: center; align-items: center; margin: 0; background-color: #0e0e0e');
                 });
