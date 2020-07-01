@@ -7,6 +7,7 @@ function getPixelsFromMag(mag, dims, logOfMaxMag) {
     var colors = [];
     for (let y = 0; y < dims[1]; y++) {
         for (let x = 0; x < dims[0]; x++) {
+            // logarithmic transformation
             var color = Math.log((cc * mag[y + x * dims[0]]) + 1);
             color = Math.round(255 * (color / logOfMaxMag));
             colors[dims[0] * y + x] = color;
@@ -56,8 +57,6 @@ img.getFourierImage = async function (uploadedFilePath, id) {
     var pixelMatrix = img.getPixelMatrix(image);
     console.log("Image scan successful, retreived Image matrix", pixelMatrix.length);
     Fourier.transform(pixelMatrix, fft);
-    // Shift the lower freqeuncy components towards the center
-    fft = Fourier.shift(fft, dims);
     // Compute magnitudes of complex coefficients
     for (let i = 0; i < fft.length; i++) {
         magnitudes[i] = Math.sqrt(fft[i].real * fft[i].real + fft[i].imag * fft[i].imag);
@@ -79,9 +78,12 @@ img.getFourierImage = async function (uploadedFilePath, id) {
 img.reconstruct = function (fft, dims) {
     const Fourier = require('./fourier');
     var pixels = [], colors = [];
+    // Uncomment for Magnitude only reconstruction
+    // for (let i = 0; i < fft.length; i++) {
+    //     fft[i].real = Math.sqrt(fft[i].real * fft[i].real + fft[i].imag * fft[i].imag);
+    //     fft[i].imag = 0;
+    // }
     console.log("Reconstruction began");
-    fft = Fourier.unshift(fft, dims);
-    console.log("unshift done");
     padZeros(fft);
     Fourier.invert(fft, pixels);
     console.log("IFFT obtained");
