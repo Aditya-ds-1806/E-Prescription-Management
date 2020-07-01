@@ -44,6 +44,11 @@ exports.addNewPrescription = function (prescID, userID) {
     });
 }
 
+exports.getPatientID = async function (prscID) {
+    var patient = await User.findOne({ role: "patient", prescriptions: prscID });
+    return patient.id;
+}
+
 exports.setRole = function (id, role) {
     User.findByIdAndUpdate(id, { role: role }, { useFindAndModify: false, new: true }, (err, res) => { if (err) throw err });
 }
