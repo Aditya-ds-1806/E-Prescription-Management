@@ -18,7 +18,7 @@
     "formidable": "^1.2.2",
     "jimp": "^0.10.3",
     "knuth-shuffle-seeded": "^1.0.6",
-    "mongoose": "^5.9.7",
+    "mongoose": "^5.11.8",
     "node-cron": "^2.0.3",
     "passport": "^0.4.1",
     "passport-google-oauth20": "^2.0.0"
