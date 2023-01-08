@@ -30,7 +30,7 @@ const app = express();
     console.log('Connected to DB')
 })();
 
-
+app.enable("trust proxy");
 app.set('view engine', 'ejs');
 
 app.use(
