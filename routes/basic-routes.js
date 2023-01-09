@@ -35,7 +35,6 @@ router.post('/verify', user.isLoggedIn, user.isPharmacist, function (req, res) {
             const FFTUtils = require('../controllers/fourier/FFTUtils');
             const prscID = fields.prscID;
             var uploadedFilePath = downloadPath + prscID + ".png";
-            fs.renameSync(files.prescription.path, uploadedFilePath);
             console.log('temp')
             fs.readdirSync(tempPath).forEach(file => {
                 console.log(file);
@@ -45,6 +44,7 @@ router.post('/verify', user.isLoggedIn, user.isPharmacist, function (req, res) {
                 console.log(file);
             });
             console.log(uploadedFilePath);
+            fs.renameSync(files.prescription.path, uploadedFilePath);
             try {
                 var frImage = await FFTUtils.getFourierImage(uploadedFilePath, await getPatientID(prscID));
                 const diffPercent = await FFTUtils.compareImages(tempPath + prscID + ".png", frImage.image);
