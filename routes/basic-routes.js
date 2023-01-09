@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router({ mergeParams: true });
-const formidable = require('formidable');
 const fs = require('fs');
 
 const user = require('../middleware/index');
@@ -16,49 +15,26 @@ router.get('/verify', user.isLoggedIn, user.isPharmacist, function (req, res) {
     res.render('verify', { user: req.user, loggedIn: req.isAuthenticated() });
 });
 
-router.post('/verify', user.isLoggedIn, user.isPharmacist, function (req, res) {
+router.post('/verify', user.isLoggedIn, user.isPharmacist, async function (req, res) {
     console.log('verify endpoint hit');
+    const FFTUtils = require('../controllers/fourier/FFTUtils');
+    const { getPatientID } = require('../controllers/user');
+
     const tempPath = __dirname + "//..//temp//";
     const downloadPath = tempPath + "uploaded//";
-    const form = formidable({
-        multiples: true,
-        uploadDir: downloadPath,
-        keepExtensions: true
-    });
-    console.log('parsing form');
-    form.parse(req, async (err, fields, files) => {
-        if (err) {
-            console.log('Error while parsing pdf');
-            console.log(err);
-            throw err;
-        } else if (files.prescription.type !== "image/png") {
-            res.send("Incorrect file format, only PNG supported!");
-        } else {
-            const { getPatientID } = require('../controllers/user');
-            const FFTUtils = require('../controllers/fourier/FFTUtils');
-            const prscID = fields.prscID;
-            var uploadedFilePath = downloadPath + prscID + ".png";
-            console.log('temp')
-            fs.readdirSync(tempPath).forEach(file => {
-                console.log(file);
-            });
-            console.log('temp/uploaded')
-            fs.readdirSync(downloadPath).forEach(file => {
-                console.log(file);
-            });
-            console.log(uploadedFilePath);
-            fs.renameSync(files.prescription.path, uploadedFilePath);
-            try {
-                var frImage = await FFTUtils.getFourierImage(uploadedFilePath, await getPatientID(prscID));
-                const diffPercent = await FFTUtils.compareImages(tempPath + prscID + ".png", frImage.image);
-                if (diffPercent === 0) return res.send(new Buffer.from(fs.readFileSync(uploadedFilePath)).toString('base64'));
-                res.send(false);
-            } catch (err) {
-                res.send(false);
-                console.error(err);
-            }
-        }
-    });
+    const { prscID, prescription } = req.body;
+    const base64EncodedImage = prescription.replace(/^data:image\/png;base64,/, "");
+    const uploadedFilePath = downloadPath + prscID + ".png";
+    fs.writeFileSync(uploadedFilePath, base64EncodedImage, 'base64');
+    try {
+        var frImage = await FFTUtils.getFourierImage(uploadedFilePath, await getPatientID(prscID));
+        const diffPercent = await FFTUtils.compareImages(tempPath + prscID + ".png", frImage.image);
+        if (diffPercent === 0) return res.send(new Buffer.from(fs.readFileSync(uploadedFilePath)).toString('base64'));
+        res.send(false);
+    } catch (err) {
+        res.send(false);
+        console.error(err);
+    }
 });
 
 router.get('/prescription', user.isLoggedIn, user.hasUpdatedDetails, user.isDoctor, function (req, res) {

@@ -2,22 +2,28 @@ const status = document.querySelector("#status");
 const submit = document.querySelector("#submit");
 const spinner = document.querySelector("#spinner");
 
-submit.addEventListener('click', function (e) {
+submit.addEventListener('click', async function (e) {
     e.preventDefault();
     var img = document.getElementById('prsc');
-    var formData = new FormData();
+    var base64EncodedImg = await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL($('input[type=file]')[0].files[0]);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+    });
     status.textContent = "";
     status.classList = "";
     img.setAttribute("src", "");
     spinner.classList.remove('d-none');
-    formData.append("prescription", $('input[type=file]')[0].files[0]);
-    formData.append("prscID", $('input')[0].value);
     $.ajax({
         type: "POST",
         url: "/verify",
-        data: formData,
+        data: JSON.stringify({
+            prscID: $('input')[0].value,
+            prescription: base64EncodedImg,
+        }),
+        contentType: 'application/json',
         processData: false,
-        contentType: false,
         cache: false,
         success: function (res) {
             spinner.classList.add('d-none');

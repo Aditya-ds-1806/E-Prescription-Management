@@ -45,7 +45,7 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
 app.use(express.static('public'));
 app.use(basicRoutes);
