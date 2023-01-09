@@ -17,6 +17,7 @@ router.get('/verify', user.isLoggedIn, user.isPharmacist, function (req, res) {
 });
 
 router.post('/verify', user.isLoggedIn, user.isPharmacist, function (req, res) {
+    console.log('verify endpoint hit');
     const tempPath = __dirname + "//..//temp//";
     const downloadPath = tempPath + "uploaded//";
     const form = formidable({
@@ -24,9 +25,11 @@ router.post('/verify', user.isLoggedIn, user.isPharmacist, function (req, res) {
         uploadDir: downloadPath,
         keepExtensions: true
     });
+    console.log('parsing form');
     form.parse(req, async (err, fields, files) => {
         if (err) {
-            console.error('Error while parsing pdf', err);
+            console.log('Error while parsing pdf');
+            console.log(err);
             throw err;
         } else if (files.prescription.type !== "image/png") {
             res.send("Incorrect file format, only PNG supported!");
