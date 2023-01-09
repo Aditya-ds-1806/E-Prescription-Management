@@ -36,6 +36,15 @@ router.post('/verify', user.isLoggedIn, user.isPharmacist, function (req, res) {
             const prscID = fields.prscID;
             var uploadedFilePath = downloadPath + prscID + ".png";
             fs.renameSync(files.prescription.path, uploadedFilePath);
+            console.log('temp')
+            fs.readdirSync(tempPath).forEach(file => {
+                console.log(file);
+            });
+            console.log('temp/uploaded')
+            fs.readdirSync(downloadPath).forEach(file => {
+                console.log(file);
+            });
+            console.log(uploadedFilePath);
             try {
                 var frImage = await FFTUtils.getFourierImage(uploadedFilePath, await getPatientID(prscID));
                 const diffPercent = await FFTUtils.compareImages(tempPath + prscID + ".png", frImage.image);
