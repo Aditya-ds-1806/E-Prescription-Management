@@ -8,11 +8,9 @@ onServerStart.createTempFolder = function () {
     var uploadedFolderPath = path.join(tempPath, "//uploaded");
     const dirExists = fs.existsSync(tempPath);
     if (!dirExists) {
-        fs.mkdir(tempPath, () => console.log("Created Temp folder"));
-        fs.mkdir(uploadedFolderPath, () => console.log("temp/uploaded folder created"));
-        setTimeout(() => {
-            console.log(fs.readdirSync(tempPath));
-        }, 5000);
+        fs.mkdirSync(uploadedFolderPath, { recursive: true }, () => console.log("temp/uploaded folder created"));
+        console.log(fs.readdirSync(tempPath));
+        console.log(fs.readdirSync(uploadedFolderPath));
     };
 }
 
