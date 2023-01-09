@@ -18,6 +18,9 @@ const onServerStart = require('./controllers/onServerStart');
 if (process.env.NODE_ENV === 'development') {
     const env = require('dotenv');
     env.config();
+    // run cronjobs in development only
+    cronJobs.deleteTempFiles();
+    cronJobs.deleteUploads();
 }
 
 const app = express();
@@ -47,9 +50,6 @@ app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
 app.use(express.static('public'));
 app.use(basicRoutes);
 app.use('/auth', authRoutes);
-
-cronJobs.deleteTempFiles();
-cronJobs.deleteUploads();
 
 app.get('*', function (req, res) {
     res.redirect('/');
