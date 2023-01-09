@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router({ mergeParams: true });
 const fs = require('fs');
+const path = require('path');
 
 const user = require('../middleware/index');
 
@@ -20,11 +21,11 @@ router.post('/verify', user.isLoggedIn, user.isPharmacist, async function (req, 
     const FFTUtils = require('../controllers/fourier/FFTUtils');
     const { getPatientID } = require('../controllers/user');
 
-    const tempPath = __dirname + "//..//temp//";
-    const downloadPath = tempPath + "uploaded//";
+    const tempPath = path.join(__dirname, "//..//temp//");
+    const downloadPath = path.join(tempPath, "uploaded//");
     const { prscID, prescription } = req.body;
     const base64EncodedImage = prescription.replace(/^data:image\/png;base64,/, "");
-    const uploadedFilePath = downloadPath + prscID + ".png";
+    const uploadedFilePath = path.join(downloadPath, prscID + ".png");
     fs.writeFileSync(uploadedFilePath, base64EncodedImage, 'base64');
     try {
         var frImage = await FFTUtils.getFourierImage(uploadedFilePath, await getPatientID(prscID));
