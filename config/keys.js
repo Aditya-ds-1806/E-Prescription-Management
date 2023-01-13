@@ -1,7 +1,7 @@
 var keys = {
     google: {
-        clientID: '266651871871-0gjo44076lp89jj3mqi8h95r1ui1ddq8.apps.googleusercontent.com',
-        clientSecret: 'kTUlOqG6gMLEcl5-usWa_EaZ',
+        clientID: process.env.CLIENT_ID,
+        clientSecret: process.env.CLIENT_SECRET,
         callbackURL: '/auth/google/redirect'
     }
 };
